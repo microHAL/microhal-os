@@ -28,8 +28,15 @@ class thread : public std::thread {
                       "std::thread arguments must be invocable after conversion to rvalues");
 
         auto __depend = nullptr;
+#if __GNUC__ >= 10
+        // A call wrapper holding tuple{DECAY_COPY(__f), DECAY_COPY(__args)...}
+        using _Invoker_type = _Invoker<__decayed_tuple<_Callable, _Args...> >;
+        _M_start_thread(stackSize, name, priority, _S_make_state<_Invoker_type>(std::forward<_Callable>(__f), std::forward<_Args>(__args)...),
+                        __depend);
+#else
         _M_start_thread(stackSize, name, priority, _S_make_state(__make_invoker(std::forward<_Callable>(__f), std::forward<_Args>(__args)...)),
                         __depend);
+#endif
     }
 #endif
 
