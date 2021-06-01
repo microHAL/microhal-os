@@ -15,7 +15,7 @@
 #include <sys/time.h>
 #include <atomic>
 
-#define _GLIBCXX_HAS_GTHREADS
+#define _GLIBCXX_HAS_GTHREADS 1
 #define __GTHREADS 1
 
 #define __MICROHAL_HAVE_TIMEOUT_MUTEX
